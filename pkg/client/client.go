@@ -2,11 +2,15 @@ package pokeapiclient
 
 import (
 	"net/http"
+	"time"
 )
+
+const pokeAPIUrl = "https://pokeapi.co/api/v2/pokemon"
 
 type Client interface {
 	GetPokemonByName(string) (Pokemon, error)
-	GetPokemonById(int) (Pokemon, error)
+	GetPokemonByID(int) (Pokemon, error)
+	GetPokemons(int) (PokemonList, error)
 }
 
 type PokeClient struct {
@@ -14,9 +18,11 @@ type PokeClient struct {
 	client *http.Client
 }
 
-func NewPokeClient() *PokeClient {
+func NewPokeClient(url string, timeout time.Duration) *PokeClient {
 	return &PokeClient{
-		client: &http.Client{},
-		apiUrl: "https://pokeapi.co/api/v2/pokemon",
+		client: &http.Client{
+			Timeout: timeout,
+		},
+		apiUrl: url,
 	}
 }
