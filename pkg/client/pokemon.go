@@ -11,6 +11,7 @@ import (
 	"github.com/codescalersinternships/pokeapi-client-eyadhussein/pkg/backoff"
 )
 
+// Pokemon represents a Pokemon object
 type Pokemon struct {
 	ID             int    `json:"id"`
 	Name           string `json:"name"`
@@ -23,6 +24,7 @@ type Pokemon struct {
 	URL string `json:"url"`
 }
 
+// PokemonList represents a list of Pokemon objects
 type PokemonList struct {
 	Count    int       `json:"count"`
 	Next     string    `json:"next"`
@@ -31,11 +33,12 @@ type PokemonList struct {
 }
 
 var (
-	ErrTimeout        = errors.New("request timed out")
-	ErrNon200Response = errors.New("non-200 HTTP response")
-	ErrInvalidJSON    = errors.New("invalid JSON response")
+	ErrTimeout        = errors.New("request timed out")     // request times out
+	ErrNon200Response = errors.New("non-200 HTTP response") // response status code is not 200
+	ErrInvalidJSON    = errors.New("invalid JSON response") // JSON response is invalid
 )
 
+// GetPokemonByID returns a Pokemon object by ID
 func (p *PokeClient) GetPokemonByID(id int) (*Pokemon, error) {
 	backoff := backoff.NewRealBackOff(1, 3)
 	url := p.apiUrl + "/" + strconv.Itoa(id)
@@ -78,6 +81,7 @@ func (p *PokeClient) GetPokemonByID(id int) (*Pokemon, error) {
 	return &result, nil
 }
 
+// GetPokemonByName returns a Pokemon object by name
 func (p *PokeClient) GetPokemonByName(name string) (*Pokemon, error) {
 	backoff := backoff.NewRealBackOff(1, 3)
 	url := p.apiUrl + "/" + name
@@ -120,6 +124,7 @@ func (p *PokeClient) GetPokemonByName(name string) (*Pokemon, error) {
 	return &result, nil
 }
 
+// GetPokemons returns a list of Pokemon objects with the specified limit
 func (p *PokeClient) GetPokemons(limit int) (*PokemonList, error) {
 	backoff := backoff.NewRealBackOff(1, 3)
 	url := p.apiUrl + "?limit=" + strconv.Itoa(limit)
